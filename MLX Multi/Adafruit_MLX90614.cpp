@@ -22,7 +22,6 @@
 Adafruit_MLX90614::Adafruit_MLX90614(uint8_t i2caddr) {
   _addr = i2caddr;
 }
-
 //////////////////////////////////////////////////////
 
 double Adafruit_MLX90614::readObjectTempC(void) {
@@ -36,7 +35,6 @@ double Adafruit_MLX90614::readAmbientTempC(void) {
 
 float Adafruit_MLX90614::readTemp(uint8_t reg) {
   float temp;
-  
   temp = read16(reg);
   temp *= .02;
   temp  -= 273.15;

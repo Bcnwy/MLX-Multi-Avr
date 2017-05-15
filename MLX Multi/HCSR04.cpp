@@ -29,7 +29,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "uart.h"
-//#include <avr/interrupt.h>
+#include <avr/interrupt.h>
 // Pins
 const int TRIG_PIN = PIND5;
 const int ECHO_PIN = PIND6;
@@ -56,16 +56,17 @@ uint8_t HC_SR04::read(){
 	set_pin(PORTD, TRIG_PIN);
 	_delay_us(20);
 	clr_pin(PORTD, TRIG_PIN);
-
+	
 	// Wait for pulse on echo pin
 	while ((PIND & _BV(ECHO_PIN)) == 0 );
 	// Measure how long the echo pin was held high (pulse width)
 	// Note: the micros() counter will overflow after ~70 min
 	TCNT1 = 0;
 	t1 = TCNT1 ;
-	//cli();
+	cli();
+
 	while ((PIND & _BV(ECHO_PIN)) != 0);
-	//sei();
+	sei();
 	t2 = TCNT1 ;
 	
 	pulse_width = (t2 - t1)* 0.5;

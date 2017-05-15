@@ -13,7 +13,9 @@
 
 #define set_pin(port, pin) (port |= (1 << pin))
 #define clr_pin(port, pin) (port &= ~(1 << pin))
-#define out_pin(port, pin) (port |= (1 << pin))
+#define out_pin(port, pin) (port |= _BV( pin))
 #define in_pin(port, pin) (port &= ~(1 << pin))
 #define _BV(bit) (1 << (bit))
+
+#define _DEBUG
 #endif /* CONFIG_H_ */
