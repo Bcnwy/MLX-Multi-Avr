@@ -67,14 +67,18 @@ void setup(void)
 /*********************************************************************/
 void IR_sensorRead(void )
 {
-	char str[18];
-	char str_out[54] = {""};
+	char str[25];
+	char str_out[100] = {""};
 	double obj_1,obj_2,obj_3,obj_4,amb_1,amb_2,amb_3,amb_4;
 	unsigned long int m_read_time = 0;
 
 	sonic.read();
 	//Read 0x5A
 	m_read_time = millis();
+	#ifdef _DEBUG
+		//Serial.sendln("> Read 0x5a...");
+	#endif
+				
 	obj_1 = MLX_5a.readObjectTempC();
 	amb_1 = MLX_5a.readAmbientTempC();
 	//Read 0x5B
@@ -84,20 +88,20 @@ void IR_sensorRead(void )
 	obj_3 = MLX_5c.readObjectTempC();
 	amb_3 = MLX_5c.readAmbientTempC();
 	//Read 0x5D
-	//obj_4 = MLX_5d.readObjectTempC();
-	//amb_4 = MLX_5d.readAmbientTempC();	
+	obj_4 = MLX_5d.readObjectTempC();
+	amb_4 = MLX_5d.readAmbientTempC();	
 	
 	sprintf(str, "T%d,%0.1f,%0.1f,%i,%lu\r\n", 1, obj_1, amb_1, (int)sonic.Distance,m_read_time);
 	strcat(str_out,str);
 
-	sprintf(str, "T%d,%0.1f,%0.1f,%i,%lu\r\n", 2, obj_2, amb_2, (int)sonic.Distance,m_read_time);
+	sprintf(str, "T%d,%.1f,%0.1f,%i,%lu\r\n", 2, obj_2, amb_2, (int)sonic.Distance,m_read_time);
 	strcat(str_out,str);
 
 	sprintf(str, "T%d,%0.1f,%0.1f,%i,%lu\r\n", 3, obj_3, amb_3, (int)sonic.Distance,m_read_time);
 	strcat(str_out,str);
 	
-	//sprintf(str, "T%d,%0.1f,%0.1f,%i,%lu\r\n", 4, obj_4, amb_4, (int)sonic.Distance,m_read_time);
-	//strcat(str_out,str);
+	sprintf(str, "T%d,%0.1f,%0.1f,%i,%lu\r\n", 4, obj_4, amb_4, (int)sonic.Distance,m_read_time);
+	strcat(str_out,str);
 	
 	Serial.send(str_out);
 }
@@ -109,7 +113,7 @@ int main(void)
 		unsigned long start_time;
 	    start_time = millis();	
 		#ifdef _DEBUG
-			Serial.sendln("> Read...");
+			Serial.sendln("> Read Sensors...");
 		#endif
 
 		IR_sensorRead();

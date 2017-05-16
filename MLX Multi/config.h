@@ -17,5 +17,5 @@
 #define in_pin(port, pin) (port &= ~(1 << pin))
 #define _BV(bit) (1 << (bit))
 
-#define _DEBUG
+//#define _DEBUG
 #endif /* CONFIG_H_ */
