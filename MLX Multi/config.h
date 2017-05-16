@@ -17,5 +17,6 @@
 #define in_pin(port, pin) (port &= ~(1 << pin))
 #define _BV(bit) (1 << (bit))
 
+unsigned long int millis(void);
 //#define _DEBUG
 #endif /* CONFIG_H_ */

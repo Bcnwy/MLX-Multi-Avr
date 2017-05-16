@@ -14,15 +14,16 @@
 #include "uart.h"
 #include "Adafruit_MLX90614.h"
 #include "HCSR04.h"
+#include "VL53L0X.h"
+
 
 Adafruit_MLX90614 MLX_5a(0x5A);
 Adafruit_MLX90614 MLX_5b(0x5B);
 Adafruit_MLX90614 MLX_5c(0x5C);
 Adafruit_MLX90614 MLX_5d(0x5D);
-//Adafruit_MLX90614 MLX_5d(0x5d);
 
-HC_SR04 sonic;
-
+HC_SR04 Sonic;
+VL53L0X TOF;
 volatile unsigned long int count = 0; 
 ISR(TIMER0_COMPA_vect)
 {
@@ -42,8 +43,10 @@ unsigned long int millis(void)
 void setup(void)
 {		
 	cli();
-	uint8_t rflag = MCUSR;
-	MCUSR = 0;
+	#ifdef _DEBUG
+		uint8_t rflag = MCUSR;
+		MCUSR = 0;
+	#endif // _DEBUG
 	
 	//DDRB |= _BV(PORTB5);
 	//PORTB &= ~_BV(PORTB5);
@@ -58,11 +61,13 @@ void setup(void)
 	TCCR1B |= (1<<CS11);
 	sei();
 	Serial.init(9600);
-	sonic.init();
+	Sonic.init();
 	#ifdef _DEBUG
 		Serial.send( rflag ,HEX);
 		Serial.sendln("> Booting...");	
 	#endif // _DEBUG
+	TOF.init();
+	TOF.setTimeout(500);
 }
 /*********************************************************************/
 void IR_sensorRead(void )
@@ -72,7 +77,8 @@ void IR_sensorRead(void )
 	double obj_1,obj_2,obj_3,obj_4,amb_1,amb_2,amb_3,amb_4;
 	unsigned long int m_read_time = 0;
 
-	sonic.read();
+	Sonic.read();
+	double mDistance = TOF.readRangeContinuousMillimeters();
 	//Read 0x5A
 	m_read_time = millis();
 	#ifdef _DEBUG
@@ -91,16 +97,16 @@ void IR_sensorRead(void )
 	obj_4 = MLX_5d.readObjectTempC();
 	amb_4 = MLX_5d.readAmbientTempC();	
 	
-	sprintf(str, "T%d,%0.1f,%0.1f,%i,%lu\r\n", 1, obj_1, amb_1, (int)sonic.Distance,m_read_time);
+	sprintf(str, "T%d,%0.1f,%0.1f,%i,%.2f,%lu\r\n", 1, obj_1, amb_1, (int)Sonic.Distance,mDistance,m_read_time);
 	strcat(str_out,str);
 
-	sprintf(str, "T%d,%.1f,%0.1f,%i,%lu\r\n", 2, obj_2, amb_2, (int)sonic.Distance,m_read_time);
+	sprintf(str, "T%d,%.1f,%0.1f,%i,%.2f,%lu\r\n", 2, obj_2, amb_2, (int)Sonic.Distance,mDistance,m_read_time);
 	strcat(str_out,str);
 
-	sprintf(str, "T%d,%0.1f,%0.1f,%i,%lu\r\n", 3, obj_3, amb_3, (int)sonic.Distance,m_read_time);
+	sprintf(str, "T%d,%0.1f,%0.1f,%i,%.2f,%lu\r\n", 3, obj_3, amb_3, (int)Sonic.Distance,mDistance,m_read_time);
 	strcat(str_out,str);
 	
-	sprintf(str, "T%d,%0.1f,%0.1f,%i,%lu\r\n", 4, obj_4, amb_4, (int)sonic.Distance,m_read_time);
+	sprintf(str, "T%d,%0.1f,%0.1f,%i,%.2f,%lu\r\n", 4, obj_4, amb_4, (int)Sonic.Distance,mDistance,m_read_time);
 	strcat(str_out,str);
 	
 	Serial.send(str_out);
@@ -109,6 +115,11 @@ void IR_sensorRead(void )
 int main(void)
 {	
 	setup();
+	// Start continuous back-to-back mode (take readings as
+	// fast as possible).  To use continuous timed mode
+	// instead, provide a desired inter-measurement period in
+	// ms (e.g. sensor.startContinuous(100)).
+	TOF.startContinuous();
 	while (1){
 		unsigned long start_time;
 	    start_time = millis();	
