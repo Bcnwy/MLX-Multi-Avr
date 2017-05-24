@@ -82,14 +82,19 @@ void IR_sensorRead(void )
  	Sonic.read();
 // 	mDistance = TOF.readRangeContinuousMillimeters();	
  	#ifdef _DEBUG
- 	Serial.sendln("> Read Distance...");
+ 	
  	#endif
 // 	//Read 0x5A
  	m_read_time = millis();	
-	
+	#ifdef _DEBUG
+		Serial.sendln("> Read 0x5A");
+	#endif
 	amb_1 = MLX_5a.readAmbientTempC();
  	obj_1 = MLX_5a.readObjectTempC();
-// 
+
+	#ifdef _DEBUG
+		Serial.sendln("> Read 0x5B");
+	#endif
 // 	//Read 0x5B	
  	amb_2 = MLX_5b.readAmbientTempC();
 	obj_2 = MLX_5b.readObjectTempC();
@@ -103,20 +108,20 @@ void IR_sensorRead(void )
 // 	amb_4 = MLX_5d.readAmbientTempC();	
 // 	obj_4 = MLX_5d.readObjectTempC();
 // 	
- 	sprintf(str, "{\"Sensor\":%d{\"Obj\":%0.1f,\"Amb\":%0.1f,\"Dist\":[%i,%.2f],\"Time\":%lu}}", 1, obj_1, amb_1, (int)Sonic.Distance,mDistance,m_read_time);
-   	//strcat(str_out,str);
-	Serial.send(str_out);
+ 	sprintf(str, "[{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}", 1, obj_1, amb_1, (int)Sonic.Distance,mDistance,m_read_time);
+   	strcat(str_out,str);
+	//Serial.sendln(str);
 	
-	sprintf(str, "{\"Sensor\":%d{\"Obj\":%0.1f,\"Amb\":%0.1f,\"Dist\":[%i,%.2f],\"Time\":%lu}}", 2, obj_2, amb_2, (int)Sonic.Distance,mDistance,m_read_time);
-	//strcat(str_out,str);
-	Serial.send(str_out);
-//  sprintf(str, "{\"Sensor\":%d{\"obj\":%0.1f,\"amb\":%0.1f,\"Dist\":[%i,%.2f],\"Time\":%lu}}", 3, obj_3, amb_3 , (int)Sonic.Distance,mDistance,m_read_time);
+	sprintf(str,"{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}]", 2, obj_2, amb_2, (int)Sonic.Distance,mDistance,m_read_time);
+	strcat(str_out,str);
+
+//  sprintf(str, "{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}", 3, obj_3, amb_3 , (int)Sonic.Distance,mDistance,m_read_time);
 //  strcat(str_out,str);
 // 	
-// 	sprintf(str, "{\"Sensor\":%d{\"obj\":%0.1f,\"amb\":%0.1f,\"Dist\":[%i,%.2f],\"Time\":%lu}}", 4, obj_4, amb_4 , (int)Sonic.Distance,mDistance,m_read_time);
+// 	sprintf(str, "{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}]", 4, obj_4, amb_4 , (int)Sonic.Distance,mDistance,m_read_time);
 // 	strcat(str_out,str);
 	 	
-	//Serial.send(str_out);
+	Serial.sendln(str_out);
 }
 /*********************************************************************/
 int main(void)
@@ -137,9 +142,7 @@ int main(void)
 			Serial.sendln("> Read Sensors...");
 		#endif
 		IR_sensorRead();
-		//_delay_ms(250);	
-		//sprintf(s,"%lu",start_time)	;
-		//Serial.sendln(s);
+		//_delay_ms(250);
 		while((millis()-start_time) <= 250);
 	}
 }

@@ -18,5 +18,5 @@
 #define _BV(bit) (1 << (bit))
 
 unsigned long int millis(void);
-#define _DEBUG
+//#define _DEBUG
 #endif /* CONFIG_H_ */

@@ -72,9 +72,9 @@ uint8_t HC_SR04::read(){
 	pulse_width = (t2 - t1)* 0.5;
 	
 	if ( pulse_width > MAX_DIST ) {
-		Serial.sendln("Out of range");
-		pulse_width = MAX_DIST;
-		return 1;
+		
+			pulse_width =8888;
+			return 1;
 	}
 	// Calculate distance in centimeters and inches. The constants
 	// are found in the data-sheet, and calculated from the assumed speed 
