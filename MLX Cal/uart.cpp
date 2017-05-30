@@ -15,7 +15,8 @@ USART Serial; //Initialize new instance of the serial class
 //set to 8 bits, no stop bit, no parity
 
 /*********************************************************************/
-void USART::init(int BAUDRATE){
+void USART::init(int BAUDRATE = 9600){
+	
 	UBRR0H = (uint8_t)(BAUD_PRESCALLER>>8);
 	UBRR0L = (uint8_t)(BAUD_PRESCALLER);
 	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
@@ -40,9 +41,11 @@ bool USART::flush(void)
 	return false;
 }
 /*********************************************************************/
-unsigned char USART::read(void){
+char USART::read(void){
+	send("read");
 
  while(!(UCSR0A & (1<<RXC0))); //wait until data is in buffer
+ send("readed");
  return UDR0;// read buffer
 }
 /*********************************************************************/

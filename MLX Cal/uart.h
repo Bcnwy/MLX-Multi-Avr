@@ -20,16 +20,16 @@ For sending serial commands using the hardware UART in the ATmega88A
 class USART
 {
 	public:
-		void init(int BAUDRATE = 9600); 
+		void init(int BAUDRATE); 
 		bool available(void);
-		unsigned char read(void);
+		char read(void);
 		bool flush(void);
 		void send(uint8_t data);
 		void send(char data) {send((uint8_t)data); };
 		void send(uint8_t* data) {send((uint8_t)*data); };
 			
 		void send(int data);
-			void send(int data,int base);
+		void send(int data,int base);
 		//void send(int data, int base){};	
 			
 		//void send(uint16_t data, int base);

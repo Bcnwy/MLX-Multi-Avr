@@ -50,8 +50,8 @@ float Adafruit_MLX90614::readTemp(uint8_t reg) {
 uint8_t Adafruit_MLX90614::setEmissivity(float emis)
 {
 	// Make sure emissivity is between 0.1 and 1.0
-	if ((emis > 1.0) || (emis < 0.1))
-	return 0; // Return fail if not
+	if ((emis > 1.0) || (emis < 0.1)) return 0; // Return fail if not
+	
 	// Calculate the raw 16-bit value:
 	uint16_t ke = uint16_t(65535.0 * emis);
 	ke = constrain<uint16_t>(ke, 0x2000, 0xFFFF);
@@ -63,13 +63,11 @@ uint8_t Adafruit_MLX90614::setEmissivity(float emis)
 float Adafruit_MLX90614::readEmissivity(void)
 {
 	uint16_t ke;
-	if (read16(MLX90614_EMISS, &ke))
-	{
-		// If we successfully read from the ke register
-		// calculate the emissivity between 0.1 and 1.0:
-		return (((float)ke) / 65535.0);
-	}
-	return 1; // Else return fail
+	if (read16(MLX90614_EMISS, &ke)) return 1; //return fail
+	
+	// If we successfully read from the ke register
+	// calculate the emissivity between 0.1 and 1.0:
+	return (((float)ke) / 65535.0);
 }
 
 /*********************************************************************/
