@@ -45,7 +45,7 @@ c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/..
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
                               uart.o (__udivmodsi4)
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
-                              C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.98/gcc/dev/atmega328p/avr5/crtatmega328p.o (exit)
+                              C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega328p/avr5/crtatmega328p.o (exit)
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
                               HCSR04.o (__do_copy_data)
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
@@ -79,8 +79,8 @@ c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/..
 
 Discarded input sections
 
- .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.98/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.98/gcc/dev/atmega328p/avr5/crtatmega328p.o
+ .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega328p/avr5/crtatmega328p.o
+ .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .text          0x00000000        0x0 Adafruit_MLX90614.o
  .data          0x00000000        0x0 Adafruit_MLX90614.o
  .bss           0x00000000        0x0 Adafruit_MLX90614.o
@@ -102,7 +102,7 @@ Discarded input sections
                 0x00000000       0x28 HCSR04.o
  .debug_ranges  0x00000000       0x18 HCSR04.o
  .debug_line    0x00000000      0x163 HCSR04.o
- .debug_str     0x00000000      0x3ea HCSR04.o
+ .debug_str     0x00000000      0x3e4 HCSR04.o
  .comment       0x00000000       0x31 HCSR04.o
  .debug_frame   0x00000000       0x58 HCSR04.o
  .text          0x00000000        0x0 main.o
@@ -110,6 +110,8 @@ Discarded input sections
  .bss           0x00000000        0x0 main.o
  .text._Z6millisv
                 0x00000000       0x12 main.o
+ .text._Z13IR_sensorReadPd17Adafruit_MLX90614
+                0x00000000       0x70 main.o
  .text          0x00000000        0x0 twimaster.o
  .data          0x00000000        0x0 twimaster.o
  .bss           0x00000000        0x0 twimaster.o
@@ -456,7 +458,7 @@ user_signatures  0x00850000         0x00000400         rw !x
 Linker script and memory map
 
 Address of section .data set to 0x800100
-LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.98/gcc/dev/atmega328p/avr5/crtatmega328p.o
+LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega328p/avr5/crtatmega328p.o
 LOAD Adafruit_MLX90614.o
 LOAD HCSR04.o
 LOAD main.o
@@ -473,7 +475,7 @@ START GROUP
 LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a
 LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libm.a
 LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a
-LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.98/gcc/dev/atmega328p/avr5\libatmega328p.a
+LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega328p/avr5\libatmega328p.a
 END GROUP
 
 .hash
@@ -568,7 +570,7 @@ END GROUP
 
 .text           0x00000000     0x1d4c
  *(.vectors)
- .vectors       0x00000000       0x68 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.98/gcc/dev/atmega328p/avr5/crtatmega328p.o
+ .vectors       0x00000000       0x68 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x00000000                __vector_default
                 0x00000000                __vectors
  *(.vectors)
@@ -598,13 +600,13 @@ END GROUP
  SORT(*)(.ctors)
  SORT(*)(.dtors)
  *(.init0)
- .init0         0x0000016e        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.98/gcc/dev/atmega328p/avr5/crtatmega328p.o
+ .init0         0x0000016e        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x0000016e                __init
  *(.init0)
  *(.init1)
  *(.init1)
  *(.init2)
- .init2         0x0000016e        0xc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.98/gcc/dev/atmega328p/avr5/crtatmega328p.o
+ .init2         0x0000016e        0xc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega328p/avr5/crtatmega328p.o
  *(.init2)
  *(.init3)
  *(.init3)
@@ -625,10 +627,10 @@ END GROUP
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x000001b6        0x8 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.98/gcc/dev/atmega328p/avr5/crtatmega328p.o
+ .init9         0x000001b6        0x8 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega328p/avr5/crtatmega328p.o
  *(.init9)
  *(.text)
- .text          0x000001be        0x4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.98/gcc/dev/atmega328p/avr5/crtatmega328p.o
+ .text          0x000001be        0x4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x000001be                __vector_22
                 0x000001be                __vector_1
                 0x000001be                __vector_24
@@ -698,9 +700,9 @@ END GROUP
  .text._Z12displayEmissPd
                 0x000006fc       0xf2 main.o
                 0x000006fc                _Z12displayEmissPd
- .text._Z13IR_sensorReadPd
+ .text._Z14IR_sensorReadsPd
                 0x000007ee       0x2c main.o
-                0x000007ee                _Z13IR_sensorReadPd
+                0x000007ee                _Z14IR_sensorReadsPd
  .text._Z11changeEmissP17Adafruit_MLX90614dd
                 0x0000081a       0xac main.o
                 0x0000081a                _Z11changeEmissP17Adafruit_MLX90614dd
@@ -709,7 +711,7 @@ END GROUP
                 0x000008c6                _Z19calibrateEmissivityPd
  .text.main     0x00000b3a       0x5e main.o
                 0x00000b3a                main
- .text._GLOBAL__sub_I_MLX_5a
+ .text._GLOBAL__sub_I_MLX
                 0x00000b98       0x16 main.o
  .text.i2c_init
                 0x00000bae       0x12 twimaster.o
@@ -895,10 +897,8 @@ END GROUP
  *(.bss*)
  .bss.count     0x00800166        0x4 main.o
                 0x00800166                count
- .bss.MLX_5b    0x0080016a        0xb main.o
-                0x0080016a                MLX_5b
- .bss.MLX_5a    0x00800175        0xb main.o
-                0x00800175                MLX_5a
+ .bss.MLX       0x0080016a       0x16 main.o
+                0x0080016a                MLX
  .bss.Serial    0x00800180        0x8 uart.o
                 0x00800180                Serial
  .bss.Wire      0x00800188        0xa VL53L0X.o
@@ -968,7 +968,7 @@ END GROUP
 .note.gnu.avr.deviceinfo
                 0x00000000       0x40
  .note.gnu.avr.deviceinfo
-                0x00000000       0x40 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.98/gcc/dev/atmega328p/avr5/crtatmega328p.o
+                0x00000000       0x40 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega328p/avr5/crtatmega328p.o
 
 .note.gnu.build-id
  *(.note.gnu.build-id)
@@ -985,74 +985,74 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x2b8
+.debug_aranges  0x00000000      0x2c0
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x68 Adafruit_MLX90614.o
  .debug_aranges
-                0x00000068       0x70 main.o
+                0x00000068       0x78 main.o
  .debug_aranges
-                0x000000d8       0x58 twimaster.o
+                0x000000e0       0x58 twimaster.o
  .debug_aranges
-                0x00000130       0x78 uart.o
+                0x00000138       0x78 uart.o
  .debug_aranges
-                0x000001a8      0x110 VL53L0X.o
+                0x000001b0      0x110 VL53L0X.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x6446
+.debug_info     0x00000000     0x64b8
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0xd16 Adafruit_MLX90614.o
- .debug_info    0x00000d16      0xe31 main.o
- .debug_info    0x00001b47      0x1bd twimaster.o
- .debug_info    0x00001d04      0x86d uart.o
- .debug_info    0x00002571     0x3ed5 VL53L0X.o
+ .debug_info    0x00000d16      0xea3 main.o
+ .debug_info    0x00001bb9      0x1bd twimaster.o
+ .debug_info    0x00001d76      0x86d uart.o
+ .debug_info    0x000025e3     0x3ed5 VL53L0X.o
 
-.debug_abbrev   0x00000000      0xf3b
+.debug_abbrev   0x00000000      0xf68
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x395 Adafruit_MLX90614.o
- .debug_abbrev  0x00000395      0x3a7 main.o
- .debug_abbrev  0x0000073c       0xe5 twimaster.o
- .debug_abbrev  0x00000821      0x22d uart.o
- .debug_abbrev  0x00000a4e      0x4ed VL53L0X.o
+ .debug_abbrev  0x00000395      0x3d4 main.o
+ .debug_abbrev  0x00000769       0xe5 twimaster.o
+ .debug_abbrev  0x0000084e      0x22d uart.o
+ .debug_abbrev  0x00000a7b      0x4ed VL53L0X.o
 
-.debug_line     0x00000000      0xe89
+.debug_line     0x00000000      0xe99
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x28c Adafruit_MLX90614.o
- .debug_line    0x0000028c      0x206 main.o
- .debug_line    0x00000492      0x193 twimaster.o
- .debug_line    0x00000625      0x1bb uart.o
- .debug_line    0x000007e0      0x6a9 VL53L0X.o
+ .debug_line    0x0000028c      0x216 main.o
+ .debug_line    0x000004a2      0x193 twimaster.o
+ .debug_line    0x00000635      0x1bb uart.o
+ .debug_line    0x000007f0      0x6a9 VL53L0X.o
 
-.debug_frame    0x00000000      0xaf0
+.debug_frame    0x00000000      0xb38
  *(.debug_frame)
  .debug_frame   0x00000000      0x160 Adafruit_MLX90614.o
- .debug_frame   0x00000160      0x21c main.o
- .debug_frame   0x0000037c       0xa0 twimaster.o
- .debug_frame   0x0000041c      0x194 uart.o
- .debug_frame   0x000005b0      0x540 VL53L0X.o
+ .debug_frame   0x00000160      0x264 main.o
+ .debug_frame   0x000003c4       0xa0 twimaster.o
+ .debug_frame   0x00000464      0x194 uart.o
+ .debug_frame   0x000005f8      0x540 VL53L0X.o
 
-.debug_str      0x00000000     0x1a9b
+.debug_str      0x00000000     0x1abf
  *(.debug_str)
- .debug_str     0x00000000      0x53b Adafruit_MLX90614.o
-                                0x59c (size before relaxing)
- .debug_str     0x0000053b      0x341 main.o
-                                0x7d3 (size before relaxing)
- .debug_str     0x0000087c       0xdc twimaster.o
-                                0x1d5 (size before relaxing)
- .debug_str     0x00000958       0x3b uart.o
-                                0x37c (size before relaxing)
- .debug_str     0x00000993     0x1108 VL53L0X.o
-                               0x1503 (size before relaxing)
+ .debug_str     0x00000000      0x523 Adafruit_MLX90614.o
+                                0x596 (size before relaxing)
+ .debug_str     0x00000523      0x37d main.o
+                                0x802 (size before relaxing)
+ .debug_str     0x000008a0       0xdc twimaster.o
+                                0x1cf (size before relaxing)
+ .debug_str     0x0000097c       0x3b uart.o
+                                0x376 (size before relaxing)
+ .debug_str     0x000009b7     0x1108 VL53L0X.o
+                               0x14fd (size before relaxing)
 
-.debug_loc      0x00000000     0x3795
+.debug_loc      0x00000000     0x38a8
  *(.debug_loc)
  .debug_loc     0x00000000      0xa72 Adafruit_MLX90614.o
- .debug_loc     0x00000a72      0x659 main.o
- .debug_loc     0x000010cb      0x12d twimaster.o
- .debug_loc     0x000011f8      0x6d9 uart.o
- .debug_loc     0x000018d1     0x1ec4 VL53L0X.o
+ .debug_loc     0x00000a72      0x76c main.o
+ .debug_loc     0x000011de      0x12d twimaster.o
+ .debug_loc     0x0000130b      0x6d9 uart.o
+ .debug_loc     0x000019e4     0x1ec4 VL53L0X.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -1072,13 +1072,13 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x590
+.debug_ranges   0x00000000      0x598
  *(.debug_ranges)
  .debug_ranges  0x00000000       0xd8 Adafruit_MLX90614.o
- .debug_ranges  0x000000d8       0x60 main.o
- .debug_ranges  0x00000138       0x48 twimaster.o
- .debug_ranges  0x00000180       0x68 uart.o
- .debug_ranges  0x000001e8      0x3a8 VL53L0X.o
+ .debug_ranges  0x000000d8       0x68 main.o
+ .debug_ranges  0x00000140       0x48 twimaster.o
+ .debug_ranges  0x00000188       0x68 uart.o
+ .debug_ranges  0x000001f0      0x3a8 VL53L0X.o
 
 .debug_macro
  *(.debug_macro)

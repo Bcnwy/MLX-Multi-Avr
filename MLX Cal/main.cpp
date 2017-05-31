@@ -16,22 +16,19 @@
 #include "HCSR04.h"
 #include "VL53L0X.h"
 
-Adafruit_MLX90614 MLX_5a(0x5A);
-Adafruit_MLX90614 MLX_5b(0x5B);
+const int m_sensorsCount = 2;
+//Adafruit_MLX90614 MLX_5a(0x5A);
+//Adafruit_MLX90614 MLX_5b(0x5B);
 //Adafruit_MLX90614 MLX_5c(0x5C);
 //Adafruit_MLX90614 MLX_5d(0x5D);
+Adafruit_MLX90614 MLX[m_sensorsCount] = {0x5A,0x5B};
 
 volatile unsigned long int count = 0; 
 float tol = 1; 
-ISR(TIMER0_COMPA_vect)
-{
+ISR(TIMER0_COMPA_vect){
 	count++;
 }
-
-ISR(TIMER1_OVF_vect){
-	//PORTB ^= _BV(PORTB5);
-	//TIFR1 = 0;
-}
+ISR(TIMER1_OVF_vect){}
 /*********************************************************************/
 unsigned long int millis(void)
 {
@@ -104,15 +101,10 @@ uint8_t displayEmiss(double * e){
 	return 0;
 }
 /*********************************************************************/
-void IR_sensorRead(double * t){
-	//Read 0x5A
-	t[0] = MLX_5a.readObjectTempC();
-	//Read 0x5B
-	t[1] = MLX_5b.readObjectTempC();
-	//Read 0x5C
-	//t[2] = MLX_5c.readObjectTempC();
-	//Read 0x5D
-	//t[3] = MLX_5d.readObjectTempC();
+void IR_sensorReads(double * t){
+	for(int i=0;i<m_sensorsCount; i++){
+		t[i] = MLX[i].readObjectTempC();
+	}
 }
 /*********************************************************************/
 float changeEmiss(Adafruit_MLX90614 * device, double caltemp, double currenttemp){
@@ -147,27 +139,15 @@ uint8_t calibrateEmissivity(double * emissivity){
 	sprintf(str, ", %0.1f", usrtemp);
 	Serial.sendln(str);
 	
-	IR_sensorRead(t);
-	while(t[0]<(usrtemp-tol) || t[0] > (usrtemp+tol)){
-		prevE[0] = MLX_5a.readEmissivity();
-		E[0] = changeEmiss(&MLX_5a, usrtemp, t[0]);
-		IR_sensorRead(t);
+	IR_sensorReads(t);		
+	for (int i=0;i<m_sensorsCount;i++){
+		prevE[i] = MLX[i].readEmissivity();
+		while(t[i]<(usrtemp-tol) || t[i] > (usrtemp+tol)){
+			E[i] = changeEmiss(&MLX[i], usrtemp, t[i]);
+			t[i] = MLX[i].readObjectTempC();
+		}
 	}
-	while(t[1]<(usrtemp-tol) || t[1] > (usrtemp+tol)){
-		prevE[1] = MLX_5b.readEmissivity();
-		E[1] = changeEmiss(&MLX_5b, usrtemp, t[1]);
-		IR_sensorRead(t);
-	}
-	/*while(t[2]<(usrtemp-tol) || t[2] > (usrtemp+tol)){
-		E[2] = changeEmiss(&MLX_5c, usrtemp, t[2]);
-		IR_sensorRead(t);
-	}
-	while(t[3]<(usrtemp-tol) || t[3] > (usrtemp+tol)){
-		E[3] = changeEmiss(&MLX_5d, usrtemp, t[3]);
-		IR_sensorRead(t);
-	}*/
 	displayEmiss((double*)prevE);
-	
 	emissivity = (double*)E;
 	return 0;
 }
@@ -179,13 +159,13 @@ int main(void)
 	
 	setup();
 	//Serial.send(Serial.read());
-	IR_sensorRead(temps);
+	IR_sensorReads(temps);
 	displayTemp(temps);
 	
 	calibrateEmissivity(emiss);	
 	displayEmiss(emiss);
 	
-	IR_sensorRead(temps);
+	IR_sensorReads(temps);
 	displayTemp(temps);
 }
 /*********************************************************************/
