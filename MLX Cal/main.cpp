@@ -82,10 +82,10 @@ uint8_t displayTemp(double * t){
 	return 0;
 }
 /*********************************************************************/
-uint8_t displayEmiss(double * e){
-	char str[25], str_out[100] = "";
+uint8_t displayEmiss(float * e){
+	char str[20], str_out[80] = "";
 	
-	sprintf(str, "E%d,%0.1f\r\n", 1, e[0]);
+	sprintf(str, "E%d,%1.1f\r\n", 1, e[0]);
 	strcat(str_out,str);
 
 	sprintf(str, "E%d,%0.1f\r\n", 2, e[1]);
@@ -111,15 +111,16 @@ float changeEmiss(Adafruit_MLX90614 * device, double caltemp, double currenttemp
 	float emiss = device->readEmissivity();
 	if (caltemp < currenttemp) emiss += .05;
 	else if (caltemp> currenttemp) emiss -= .05;
-	device->setEmissivity((float)emiss);	
+	
+	device->setEmissivity(emiss);	
 	return emiss;
 }
 
-uint8_t calibrateEmissivity(double * emissivity){
-	const char instr[5] = {'2','5','.','0'};
-	uint8_t ptr=0;
+uint8_t calibrateEmissivity(float * emissivity){
+	const char instr[5] = {'3','5','.','0'};
+	uint8_t ptr=0, loop=0;
 	double usrtemp = 0, t[4];
-	float E[4] ,prevE[4];
+	float E[4] = {1,1,1,1},prevE[4];
 	
 	Serial.send("> Temperature to calibrate to: ");
 	Serial.send(instr);
@@ -138,25 +139,40 @@ uint8_t calibrateEmissivity(double * emissivity){
 	char str[5];
 	sprintf(str, ", %0.1f", usrtemp);
 	Serial.sendln(str);
-	
-	IR_sensorReads(t);		
+
 	for (int i=0;i<m_sensorsCount;i++){
-		prevE[i] = MLX[i].readEmissivity();
-		while(t[i]<(usrtemp-tol) || t[i] > (usrtemp+tol)){
-			E[i] = changeEmiss(&MLX[i], usrtemp, t[i]);
-			t[i] = MLX[i].readObjectTempC();
-		}
+		MLX[i].setEmissivity(1);
+		t[i] = MLX[i].readObjectTempC();	
+		
+			prevE[i] = MLX[i].readEmissivity();
+			E[i] = prevE[i];
+			loop = 0;
+			while(t[i] > (usrtemp+tol)||t[i] < (usrtemp-tol)){
+				loop++;
+				if (loop>18){
+					E[i] = -1;
+					MLX[i].setEmissivity(1);
+					break;
+				}
+				else{
+					E[i] = changeEmiss(&MLX[i], usrtemp, t[i]);
+					_delay_ms(10);
+					t[i] = MLX[i].readObjectTempC();	
+				}
+			}
 	}
-	displayEmiss((double*)prevE);
-	emissivity = (double*)E;
+	//displayEmiss(prevE);
+	for (int i=0;i<m_sensorsCount;i++){
+		emissivity[i] = E[i];
+	}
 	return 0;
 }
 
 /*********************************************************************/
 int main(void)
 {	
-	double temps[4], emiss[4];
-	
+	double  temps[4];
+	float emiss[4];
 	setup();
 	//Serial.send(Serial.read());
 	IR_sensorReads(temps);
