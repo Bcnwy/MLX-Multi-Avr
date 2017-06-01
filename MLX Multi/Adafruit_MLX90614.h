@@ -26,14 +26,18 @@
 
 class Adafruit_MLX90614  {
  public:
-  Adafruit_MLX90614(uint8_t addr = MLX90614_I2CADDR);
-  double readObjectTempC(void);
-  double readAmbientTempC(void);
+	Adafruit_MLX90614(uint8_t addr = MLX90614_I2CADDR);
+	double readObjectTempC(void);
+	double readAmbientTempC(void);
+	uint8_t setEmissivity(float emis);
+	float readEmissivity(void);
   
  private:
- I2c Wire;
-  float readTemp(uint8_t reg);
-  uint8_t _addr;
-  uint16_t read16(uint8_t addr);
+	I2c Wire; uint8_t _addr;
+	float readTemp(uint8_t reg);
+	uint8_t read16(uint8_t a , uint16_t * d);
+	uint8_t writeEEPROM(uint8_t reg, int16_t data);
+	uint8_t write16(uint8_t reg, int16_t data);
+	uint8_t crc8 (uint8_t inCrc, uint8_t inData);
 };
 
