@@ -16,10 +16,10 @@
 #include "HCSR04.h"
 #include "VL53L0X.h"
 
-Adafruit_MLX90614 MLX_5a(0x5A);
-Adafruit_MLX90614 MLX_5b(0x5E);
-Adafruit_MLX90614 MLX_5c(0x5C);
-Adafruit_MLX90614 MLX_5d(0x5D);
+// Adafruit_MLX90614 MLX_5a(0x5A);
+// Adafruit_MLX90614 MLX_5b(0x5E);
+// Adafruit_MLX90614 MLX_5c(0x5C);
+// Adafruit_MLX90614 MLX_5d(0x5D);
 
 const int m_sensorsCount = 2;
 Adafruit_MLX90614 MLX[m_sensorsCount] = {0x5A,0x5B};
@@ -46,7 +46,6 @@ void setup(void)
 	
 	//DDRB |= _BV(PORTB5);
 	//PORTB &= ~_BV(PORTB5);
-	
 	TCNT0 = 0;
 	TCNT1 = 0;
 	TCCR0A |= (1<<WGM01);
@@ -57,6 +56,7 @@ void setup(void)
 	TCCR1B |= (1<<CS11);
 	sei();
 	Serial.init(9600);
+	Serial.read();
 	Sonic.init();
 	#ifdef _DEBUG
 		Serial.send( rflag ,HEX);
