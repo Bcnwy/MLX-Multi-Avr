@@ -17,13 +17,13 @@
 #include "VL53L0X.h"
 
 Adafruit_MLX90614 MLX_5a(0x5A);
-Adafruit_MLX90614 MLX_5b(0x5B);
-//Adafruit_MLX90614 MLX_5c(0x5C);
-//Adafruit_MLX90614 MLX_5d(0x5D);
+Adafruit_MLX90614 MLX_5b(0x5E);
+Adafruit_MLX90614 MLX_5c(0x5C);
+Adafruit_MLX90614 MLX_5d(0x5D);
 //Adafruit_MLX90614 MLX_5e(0x5E);
 
 HC_SR04 Sonic;
-//VL53L0X TOF;
+VL53L0X TOF;
 volatile unsigned long int count = 0; 
 ISR(TIMER0_COMPA_vect)
 {
@@ -66,21 +66,25 @@ void setup(void)
 		Serial.send( rflag ,HEX);
 		Serial.sendln("> Booting...");	
 	#endif // _DEBUG
-// 	TOF.init();
-// 	TOF.setTimeout(250);
-// 	TOF.setSignalRateLimit(0.2);
-// 	TOF.setVcselPulsePeriod(VL53L0X::VcselPeriodPreRange, 16);
-// 	TOF.setVcselPulsePeriod(VL53L0X::VcselPeriodFinalRange, 12);
+//  	TOF.init();
+//  	TOF.setTimeout(250);
+//  	TOF.setSignalRateLimit(0.2);
+//  	TOF.setVcselPulsePeriod(VL53L0X::VcselPeriodPreRange, 16);
+//  	TOF.setVcselPulsePeriod(VL53L0X::VcselPeriodFinalRange, 12);
+	 
+	 	#ifdef _DEBUG
+	 	Serial.sendln("> TOF...");
+	 	#endif // _DEBUG
 }
 /*********************************************************************/
 void IR_sensorRead(void )
 {
-	char str[100], str_out[100] = {""};
+	char str[125], str_out[500] = {""};
 	double obj_1,obj_2,obj_3,obj_4,amb_1,amb_2,amb_3,amb_4,mDistance = 0;
 	unsigned long int m_read_time = 0;
 
  	Sonic.read();
-// 	mDistance = TOF.readRangeContinuousMillimeters();	
+ 	//mDistance = TOF.readRangeContinuousMillimeters();	
  	#ifdef _DEBUG
  	
  	#endif
@@ -98,30 +102,35 @@ void IR_sensorRead(void )
 // 	//Read 0x5B	
  	amb_2 = MLX_5b.readAmbientTempC();
 	obj_2 = MLX_5b.readObjectTempC();
-// 	//if (obj_2 = MLX_5b.readObjectTempC() <10) 
 // 
+	#ifdef _DEBUG
+	Serial.sendln("> Read 0x5C");
+	#endif
 // 	//Read 0x5C	
-//	amb_3 = MLX_5c.readAmbientTempC();
-// 	obj_3 = MLX_5c.readObjectTempC();
+	amb_3 = MLX_5c.readAmbientTempC();
+ 	obj_3 = MLX_5c.readObjectTempC();
 //
+	#ifdef _DEBUG
+	Serial.sendln("> Read 0x5C");
+	#endif
 // 	//Read 0x5D
-// 	amb_4 = MLX_5d.readAmbientTempC();	
-// 	obj_4 = MLX_5d.readObjectTempC();
+	amb_4 = MLX_5d.readAmbientTempC();	
+	obj_4 = MLX_5d.readObjectTempC();
 // 	
  	sprintf(str, "[{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}", 1, obj_1, amb_1, (int)Sonic.Distance,mDistance,m_read_time);
    	strcat(str_out,str);
-	//Serial.sendln(str);
-	
-	sprintf(str,"{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}]", 2, obj_2, amb_2, (int)Sonic.Distance,mDistance,m_read_time);
+		
+	sprintf(str, "{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}", 2, obj_2, amb_2, (int)Sonic.Distance,mDistance,m_read_time);
 	strcat(str_out,str);
 
-//  sprintf(str, "{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}", 3, obj_3, amb_3 , (int)Sonic.Distance,mDistance,m_read_time);
-//  strcat(str_out,str);
-// 	
-// 	sprintf(str, "{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}]", 4, obj_4, amb_4 , (int)Sonic.Distance,mDistance,m_read_time);
-// 	strcat(str_out,str);
-	 	
+	sprintf(str, "{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}", 3, obj_3, amb_3, (int)Sonic.Distance,mDistance,m_read_time);
+	strcat(str_out,str);
+//  	
+	sprintf(str, "{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}]", 4, obj_4, amb_4, (int)Sonic.Distance,mDistance,m_read_time);
+	strcat(str_out,str);
+	
 	Serial.sendln(str_out);
+
 }
 /*********************************************************************/
 int main(void)
