@@ -41,7 +41,8 @@ C_SRCS +=  \
 ../HCSR04.cpp \
 ../main.cpp \
 ../twimaster.c \
-../uart.cpp
+../uart.cpp \
+../VL53L0X.cpp
 
 
 PREPROCESSING_SRCS += 
@@ -55,28 +56,32 @@ Adafruit_MLX90614.o \
 HCSR04.o \
 main.o \
 twimaster.o \
-uart.o
+uart.o \
+VL53L0X.o
 
 OBJS_AS_ARGS +=  \
 Adafruit_MLX90614.o \
 HCSR04.o \
 main.o \
 twimaster.o \
-uart.o
+uart.o \
+VL53L0X.o
 
 C_DEPS +=  \
 Adafruit_MLX90614.d \
 HCSR04.d \
 main.d \
 twimaster.d \
-uart.d
+uart.d \
+VL53L0X.d
 
 C_DEPS_AS_ARGS +=  \
 Adafruit_MLX90614.d \
 HCSR04.d \
 main.d \
 twimaster.d \
-uart.d
+uart.d \
+VL53L0X.d
 
 OUTPUT_FILE_PATH +=MLX\ Multi.elf
 
@@ -121,6 +126,13 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./uart.o: .././uart.cpp
+	@echo Building file: $<
+	@echo Invoking: AVR8/GNU C Compiler : 4.9.2
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-g++.exe$(QUOTE) -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.98\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328p -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.98\gcc\dev\atmega328p" -c -std=c++11 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./VL53L0X.o: .././VL53L0X.cpp
 	@echo Building file: $<
 	@echo Invoking: AVR8/GNU C Compiler : 4.9.2
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-g++.exe$(QUOTE) -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.98\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328p -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.98\gcc\dev\atmega328p" -c -std=c++11 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

@@ -20,7 +20,7 @@ main.d main.o: .././main.cpp .././config.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h \
  .././uart.h .././Adafruit_MLX90614.h .././I2C.h .././i2cmaster.h \
- .././HCSR04.h
+ .././HCSR04.h .././VL53L0X.h
 
 .././config.h:
 
@@ -73,3 +73,5 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 .././i2cmaster.h:
 
 .././HCSR04.h:
+
+.././VL53L0X.h:

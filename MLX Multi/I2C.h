@@ -33,15 +33,16 @@
          m_buffer[m_bufferIndex++] = byte;
     }
 
-    void endTransmission(bool stop = true)
+    uint8_t endTransmission(bool stop = true)
     {
          for (uint8_t index = 0; index < m_bufferIndex; ++index) {
              if (i2c_write(m_buffer[index]) != 0)
-                 return;
+                 return 1;
          }
 
-        if (stop)
-             i2c_stop();
+        if (stop)i2c_stop();
+			 
+		return 0;	
      }
 
      uint8_t requestFrom(uint8_t address, uint8_t quantity, bool stop = true)
