@@ -17,7 +17,7 @@
 #include "VL53L0X.h"
 
 Adafruit_MLX90614 MLX_5a(0x5A);
-Adafruit_MLX90614 MLX_5b(0x5B);
+Adafruit_MLX90614 MLX_5b(0x5E);
 Adafruit_MLX90614 MLX_5c(0x5C);
 Adafruit_MLX90614 MLX_5d(0x5D);
 //Adafruit_MLX90614 MLX_5e(0x5E);

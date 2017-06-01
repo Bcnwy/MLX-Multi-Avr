@@ -1341,8 +1341,8 @@ Adafruit_MLX90614 MLX_5a(0x5A);
      8ea:	8d ec       	ldi	r24, 0xCD	; 205
      8ec:	91 e0       	ldi	r25, 0x01	; 1
      8ee:	0e 94 e1 00 	call	0x1c2	; 0x1c2 <_ZN17Adafruit_MLX90614C1Eh>
-Adafruit_MLX90614 MLX_5b(0x5B);
-     8f2:	6b e5       	ldi	r22, 0x5B	; 91
+Adafruit_MLX90614 MLX_5b(0x5E);
+     8f2:	6e e5       	ldi	r22, 0x5E	; 94
      8f4:	82 ec       	ldi	r24, 0xC2	; 194
      8f6:	91 e0       	ldi	r25, 0x01	; 1
      8f8:	0e 94 e1 00 	call	0x1c2	; 0x1c2 <_ZN17Adafruit_MLX90614C1Eh>
