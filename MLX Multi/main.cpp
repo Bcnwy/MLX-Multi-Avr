@@ -20,23 +20,19 @@ Adafruit_MLX90614 MLX_5a(0x5A);
 Adafruit_MLX90614 MLX_5b(0x5E);
 Adafruit_MLX90614 MLX_5c(0x5C);
 Adafruit_MLX90614 MLX_5d(0x5D);
-//Adafruit_MLX90614 MLX_5e(0x5E);
+
+const int m_sensorsCount = 2;
+Adafruit_MLX90614 MLX[m_sensorsCount] = {0x5A,0x5B};
 
 HC_SR04 Sonic;
 VL53L0X TOF;
 volatile unsigned long int count = 0; 
-ISR(TIMER0_COMPA_vect)
-{
+ISR(TIMER0_COMPA_vect){
 	count++;
 }
-
-ISR(TIMER1_OVF_vect){
-	//PORTB ^= _BV(PORTB5);
-	//TIFR1 = 0;
-}
+ISR(TIMER1_OVF_vect){}
 /*********************************************************************/
-unsigned long int millis(void)
-{
+unsigned long int millis(void){
 	return count;
 }
 /*********************************************************************/
@@ -80,69 +76,25 @@ void setup(void)
 void IR_sensorRead(void )
 {
 	char str[125], str_out[500] = {""};
-	double obj_1,obj_2,obj_3,obj_4,amb_1,amb_2,amb_3,amb_4,mDistance = 0;
+	double obj[m_sensorsCount], amb[m_sensorsCount], mDistance = 0;
 	unsigned long int m_read_time = 0;
 
  	Sonic.read();
  	//mDistance = TOF.readRangeContinuousMillimeters();	
- 	#ifdef _DEBUG
- 	
- 	#endif
-// 	//Read 0x5A
- 	m_read_time = millis();	
-	#ifdef _DEBUG
-		Serial.sendln("> Read 0x5A");
-	#endif
-	amb_1 = MLX_5a.readAmbientTempC();
- 	obj_1 = MLX_5a.readObjectTempC();
 
-	#ifdef _DEBUG
-		Serial.sendln("> Read 0x5B");
-	#endif
-// 	//Read 0x5B	
- 	amb_2 = MLX_5b.readAmbientTempC();
-	obj_2 = MLX_5b.readObjectTempC();
-// 
-	#ifdef _DEBUG
-	Serial.sendln("> Read 0x5C");
-	#endif
-// 	//Read 0x5C	
-	amb_3 = MLX_5c.readAmbientTempC();
- 	obj_3 = MLX_5c.readObjectTempC();
-//
-	#ifdef _DEBUG
-	Serial.sendln("> Read 0x5C");
-	#endif
-// 	//Read 0x5D
-	amb_4 = MLX_5d.readAmbientTempC();	
-	obj_4 = MLX_5d.readObjectTempC();
-// 	
- 	sprintf(str, "[{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}", 1, obj_1, amb_1, (int)Sonic.Distance,mDistance,m_read_time);
-   	strcat(str_out,str);
-		
-	sprintf(str, "{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}", 2, obj_2, amb_2, (int)Sonic.Distance,mDistance,m_read_time);
-	strcat(str_out,str);
-
-	sprintf(str, "{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}", 3, obj_3, amb_3, (int)Sonic.Distance,mDistance,m_read_time);
-	strcat(str_out,str);
-//  	
-	sprintf(str, "{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%.2f],\"uTime\":%lu}]", 4, obj_4, amb_4, (int)Sonic.Distance,mDistance,m_read_time);
-	strcat(str_out,str);
+	for(int i=0;i<m_sensorsCount; i++){
+		obj[i] = MLX[i].readObjectTempC();
+		amb[i] = MLX[i].readAmbientTempC();
 	
+ 		sprintf(str, "[{\"Sensor\":%d,\"Obj\":%0.1f,\"Amb\":%0.1f,\"Distance\":[%i,%0.1f],\"uTime\":%lu}", i+1, obj[i], amb[i], (int)Sonic.Distance, mDistance, m_read_time);
+   		strcat(str_out,str);
+	}
 	Serial.sendln(str_out);
-
 }
 /*********************************************************************/
 int main(void)
 {	
 	setup();
-	// Start continuous back-to-back mode (take readings as
-	// fast as possible).  To use continuous timed mode
-	// instead, provide a desired inter-measurement period in
-	// ms (e.g. sensor.startContinuous(100)).
-	//char s[32];
-	//sprintf(s,"%.3f",TOF.getSignalRateLimit());
-	//Serial.send(s);
 	//TOF.startContinuous(100);
 	while (1){
 		unsigned long int start_time;
