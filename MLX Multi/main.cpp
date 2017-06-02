@@ -30,7 +30,6 @@ Adafruit_MLX90614 MLX[m_sensorsCount] = {0x5A,0x5B};//,0x5C,0x5D};
 #ifdef _TOF
 	VL53L0X TOF;
 #endif // TOF
-uint8_t inbyte;
 volatile unsigned long int count = 0; 
 ISR(TIMER0_COMPA_vect){
 	count++;
@@ -39,29 +38,6 @@ ISR(TIMER1_OVF_vect){}
 /*********************************************************************/
 unsigned long int millis(void){
 	return count;
-}
-
-uint8_t read_byte (char* data)
-{
-	static int i = 1;
-	bool serial_end = false;
-	Serial.send("read");
-	while(!serial_end){
-		if (Serial.available() > 0){
-			inbyte = Serial.read();
-			if (inbyte != 0x0D && inbyte != 0x0A ){
-				data[i] = inbyte;
-				Serial.send(inbyte);
-				i++;
-			}
-			else{
-				inbyte = data[i-1];
-				i=1;
-				serial_end = true;
-			}
-		}
-	}
-	return inbyte;
 }
 /*********************************************************************/
 void setup(void)
@@ -127,6 +103,20 @@ void IR_sensorRead(void )
 	Serial.sendln(str_out);
 }
 /*********************************************************************/
+void cal_emiss()
+{
+	// TODO: Cal routine
+	Serial.sendln("cal...");
+}
+void set_emiss(uint8_t e)
+{
+	// TODO: Cal routine
+	Serial.sendln("emiss...");
+	for(int i=0;i<m_sensorsCount; i++){
+		MLX[i].setEmissivity(e);
+	}		
+}
+/*********************************************************************/
 int main(void)
 {			
 	unsigned long int start_time;
@@ -141,20 +131,34 @@ int main(void)
 		#ifdef _DEBUG
 			Serial.sendln("> Read Sensors...");
 		#endif
-		IR_sensorRead();
+		//IR_sensorRead();
 		
 		if (Serial.available())
 		{
 			char* d_str;
-			d_str = Serial.readln();	
+			d_str = Serial.readln();
+			Serial.sendln(d_str);	
 			if(d_str[0] == 's'){
-				#ifdef _DEBUG
-					Serial.sendln("> Settings");
-				#endif // _DEBUG
+				char inbyte;
 				// TODO: Implement settings menu 
+				Serial.sendln("> Settings");
+				Serial.sendln("1) Calibrate");
+				Serial.sendln("2) Set Emissivity");
+				inbyte = Serial.read();
+				switch ((uint8_t)inbyte)
+				{
+				case 1: 
+					cal_emiss();
+					break;
+				case 2: 
+					Serial.sendln("Set E: ");
+					inbyte = Serial.read();
+					set_emiss((uint8_t)inbyte);
+					break;
+				}
 			}
 		}
-		while((millis()-start_time) <= 250);
+		while((millis()-start_time) <= 1000);
 	}
 }
 /*********************************************************************/
