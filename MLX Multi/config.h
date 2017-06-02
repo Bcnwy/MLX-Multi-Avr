@@ -18,5 +18,7 @@
 #define _BV(bit) (1 << (bit))
 
 unsigned long int millis(void);
-//#define _DEBUG
+#define _DEBUG
+//#define _TOF
+#define _Sonic
 #endif /* CONFIG_H_ */

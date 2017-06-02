@@ -16,16 +16,21 @@
 #include "HCSR04.h"
 #include "VL53L0X.h"
 
+
 // Adafruit_MLX90614 MLX_5a(0x5A);
 // Adafruit_MLX90614 MLX_5b(0x5E);
 // Adafruit_MLX90614 MLX_5c(0x5C);
 // Adafruit_MLX90614 MLX_5d(0x5D);
 
 const int m_sensorsCount = 2;
-Adafruit_MLX90614 MLX[m_sensorsCount] = {0x5A,0x5B};
-
-HC_SR04 Sonic;
-VL53L0X TOF;
+Adafruit_MLX90614 MLX[m_sensorsCount] = {0x5A,0x5B};//,0x5C,0x5D};
+#ifdef _Sonic
+	HC_SR04 Sonic;
+#endif // Sonic
+#ifdef _TOF
+	VL53L0X TOF;
+#endif // TOF
+uint8_t inbyte;
 volatile unsigned long int count = 0; 
 ISR(TIMER0_COMPA_vect){
 	count++;
@@ -34,6 +39,29 @@ ISR(TIMER1_OVF_vect){}
 /*********************************************************************/
 unsigned long int millis(void){
 	return count;
+}
+
+uint8_t read_byte (char* data)
+{
+	static int i = 1;
+	bool serial_end = false;
+	Serial.send("read");
+	while(!serial_end){
+		if (Serial.available() > 0){
+			inbyte = Serial.read();
+			if (inbyte != 0x0D && inbyte != 0x0A ){
+				data[i] = inbyte;
+				Serial.send(inbyte);
+				i++;
+			}
+			else{
+				inbyte = data[i-1];
+				i=1;
+				serial_end = true;
+			}
+		}
+	}
+	return inbyte;
 }
 /*********************************************************************/
 void setup(void)
@@ -56,21 +84,24 @@ void setup(void)
 	TCCR1B |= (1<<CS11);
 	sei();
 	Serial.init(9600);
-	Serial.read();
-	Sonic.init();
+
 	#ifdef _DEBUG
 		Serial.send( rflag ,HEX);
 		Serial.sendln("> Booting...");	
-	#endif // _DEBUG
-//  	TOF.init();
-//  	TOF.setTimeout(250);
-//  	TOF.setSignalRateLimit(0.2);
-//  	TOF.setVcselPulsePeriod(VL53L0X::VcselPeriodPreRange, 16);
-//  	TOF.setVcselPulsePeriod(VL53L0X::VcselPeriodFinalRange, 12);
-	 
-	 	#ifdef _DEBUG
-	 	Serial.sendln("> TOF...");
-	 	#endif // _DEBUG
+	#endif // _DEBUG	
+	#ifdef _Sonic
+		Sonic.init();
+	#endif // Sonic
+	#ifdef _TOF
+ 		TOF.init();
+ 		TOF.setTimeout(250);
+ 		TOF.setSignalRateLimit(0.2);
+ 		TOF.setVcselPulsePeriod(VL53L0X::VcselPeriodPreRange, 16);
+ 		TOF.setVcselPulsePeriod(VL53L0X::VcselPeriodFinalRange, 12);
+		#ifdef _DEBUG
+		Serial.sendln("> TOF Started");
+		#endif // _DEBUG 
+	#endif // TOF
 }
 /*********************************************************************/
 void IR_sensorRead(void )
@@ -78,10 +109,14 @@ void IR_sensorRead(void )
 	char str[125], str_out[500] = {""};
 	double obj[m_sensorsCount], amb[m_sensorsCount], mDistance = 0;
 	unsigned long int m_read_time = 0;
-
- 	Sonic.read();
- 	//mDistance = TOF.readRangeContinuousMillimeters();	
-
+	
+	#ifdef _Sonic
+		Sonic.read();
+	#endif // _Sonic
+ 	#ifdef _TOF
+		mDistance = TOF.readRangeContinuousMillimeters();	
+	#endif // _TOF
+	
 	for(int i=0;i<m_sensorsCount; i++){
 		obj[i] = MLX[i].readObjectTempC();
 		amb[i] = MLX[i].readAmbientTempC();
@@ -93,17 +128,32 @@ void IR_sensorRead(void )
 }
 /*********************************************************************/
 int main(void)
-{	
+{			
+	unsigned long int start_time;
 	setup();
-	//TOF.startContinuous(100);
+	#ifdef _TOF	
+		TOF.startContinuous(100);
+	#endif // _TOF
+
 	while (1){
-		unsigned long int start_time;
+		
 	    start_time = millis();	
 		#ifdef _DEBUG
 			Serial.sendln("> Read Sensors...");
 		#endif
 		IR_sensorRead();
-		//_delay_ms(250);
+		
+		if (Serial.available())
+		{
+			char* d_str;
+			d_str = Serial.readln();	
+			if(d_str[0] == 's'){
+				#ifdef _DEBUG
+					Serial.sendln("> Settings");
+				#endif // _DEBUG
+				// TODO: Implement settings menu 
+			}
+		}
 		while((millis()-start_time) <= 250);
 	}
 }
